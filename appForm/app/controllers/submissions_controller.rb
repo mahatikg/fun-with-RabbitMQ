@@ -1,7 +1,7 @@
 class SubmissionsController < ApplicationController
-  require 'Publisher'
+  include Publisher
   require 'bunny'
-
+  require 'pry'
   before_action :set_submission, only: [:show, :edit, :update, :destroy]
 
   # GET /submissions
@@ -31,7 +31,8 @@ class SubmissionsController < ApplicationController
 
     respond_to do |format|
       if @submission.save
-        Publisher.publish(@submission)
+        # binding.pry
+        publish(@submission)
         format.html { redirect_to @submission, notice: 'Submission was successfully created.' }
         format.json { render :show, status: :created, location: @submission }
       else
