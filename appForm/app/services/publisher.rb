@@ -6,9 +6,23 @@ require 'json'
  AMQP_URL = 'amqp://ecxgsnig:ZYr8t6k6p2ADenifiNVc5Afiodmj-v_s@skunk.rmq.cloudamqp.com/ecxgsnig'
 
 
+
   def start_bunny
     #create a connection instance
-    @connection = Bunny.new ENV['AMQP_URL']
+  #   default_parameters = {
+  #   :host => 'skunk.rmq.cloudamqp.com',
+  #   :vhost => 	'ecxgsnig',
+  #   :password => 'ZYr8t6k6p2ADenifiNVc5Afiodmj-v_s',
+  #   :user => 'MeeruNilaya'
+  # }
+
+    @connection = Bunny.new(
+      :host => 'skunk.rmq.cloudamqp.com',
+      :vhost => 	'ecxgsnig',
+      :password => 'cpaQAhJyOqHXSNfeRhyk0jzhxHV8JECS',
+      :user => 'ecxgsnig'
+    )
+    # binding.pry
     #establish/start the connection
     @connection.start
     create_channel
@@ -23,9 +37,9 @@ require 'json'
   def create_queue
     #declare a queue and give it a name on this channel
     @queue = @channel.queue("MG")
-    print("logging OUT HERE!!!!!!!!!! ", @queue )
 
-    create exchange
+
+    create_exchange
   end
 
   def create_exchange
@@ -33,14 +47,14 @@ require 'json'
     @exchange = @channel.direct("MGexchange", :durable => true)
     #bind exchange to the queue
     @queue.bind(@exchange, :routing_key => "MGprocess")
-    to_publish
+
   end
 
   def publish(submission)
   start_bunny
   #publish the the 'submission' (the variable storing the event and payload) to the
   #queue and routing key previously declared
-    @exchange.publish("submission", :key => 'MG', :timestamp => Time.now.to_i, routing_key => "MGprocess")
+    @exchange.publish("submission", :key => 'MG', :timestamp => Time.now.to_i, :routing_key => "MGprocess")
     sleep 1.0
     @connection.close
   end
