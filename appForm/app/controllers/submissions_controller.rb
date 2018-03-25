@@ -1,5 +1,6 @@
 class SubmissionsController < ApplicationController
   include Publisher
+  include Receiver
   require 'bunny'
   require 'pry'
   before_action :set_submission, only: [:show, :edit, :update, :destroy]
@@ -28,6 +29,7 @@ class SubmissionsController < ApplicationController
   # POST /submissions.json
   def create
     @submission = Submission.new(submission_params)
+    # binding.pry
 
     respond_to do |format|
       if @submission.save
@@ -35,6 +37,7 @@ class SubmissionsController < ApplicationController
         publish(@submission)
         format.html { redirect_to @submission, notice: 'Submission was successfully created.' }
         format.json { render :show, status: :created, location: @submission }
+        start_receiver_connection
       else
         format.html { render :new }
         format.json { render json: @submission.errors, status: :unprocessable_entity }

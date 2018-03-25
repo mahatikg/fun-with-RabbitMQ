@@ -1,8 +1,11 @@
 class SendMailMailer < ApplicationMailer
   default from: "mahatikg@gmail.com"
 
-  def email(user)
-    @user = user
-    mail(to: @user.email, subject: 'insert receiver data here ')
+  def email(data)
+    binding.pry
+    mail(to: data.email, subject: 'hello').deliver_now
+    binding.pry
+    puts "THE EMAIL #{data.email} "
+
   end
 end
