@@ -2,39 +2,48 @@ module Receiver
 require "rubygems"
 require "bunny"
 require "json"
+# require 'SendMailMailer'
+# include Publisher
+  def start_receiver_connection
+    binding.pry
+    @conn = Bunny.new(
+      :host => 'skunk.rmq.cloudamqp.com',
+      :vhost => 	'ecxgsnig',
+      :password => 'cpaQAhJyOqHXSNfeRhyk0jzhxHV8JECS',
+      :user => 'ecxgsnig'
+    )
 
-  def start_connection
-    @conn = Bunny.new ENV['AMQP_URL']
-    # The connection will be established when start is called
-    conn.start
+    @conn.start
     access_channel
+
   end
 
   def access_channel
-  # Create a channel in the TCP connection
-    @channel = @conn.create_channel
-    # Declare a queue with a given name, examplequeue. In this example is a durable shared queue used.
-    @queue = @channel.queue("MG", :durable => true)
-    pdf_processing
+    subscribe
   end
+
 # Method for the PDF processing
   def pdf_processing(json_information_message)
-    puts json_information_message['email']
-    sleep 5.0
-    puts "pdf processing done"
+    binding.pry
+    SendMailMailer.new.email(json_information_message)
+    sleep 20.0
+
+    @connection.close
+    puts "connection closed"
+
   end
 
   def subscribe
    # consumer to subscribe to the queue that is being published to
-       q.subscribe(:block => true) do |delivery_info, properties, payload|
+       @queue.subscribe(manual_ack: true) do |delivery_info, properties, payload|
+
+        puts "this is the payload: #{payload}"
         json_information_message = JSON.parse(payload)
+              binding.pry
+              puts "#{json_information_message}"
         pdf_processing(json_information_message)
       end
 
-  end
-
-  def email
-    #method to pass payload to email 
   end
 
 end
