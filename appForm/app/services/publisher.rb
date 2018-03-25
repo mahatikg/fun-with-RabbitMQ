@@ -23,6 +23,8 @@ require 'json'
   def create_queue
     #declare a queue and give it a name on this channel
     @queue = @channel.queue("MG")
+    print("logging OUT HERE!!!!!!!!!! ", @queue )
+
     create exchange
   end
 
@@ -40,7 +42,7 @@ require 'json'
   #queue and routing key previously declared
     @exchange.publish("submission", :key => 'MG', :timestamp => Time.now.to_i, routing_key => "MGprocess")
     sleep 1.0
-    @connection.close 
+    @connection.close
   end
 
 end
