@@ -5,6 +5,7 @@ A first attempt at setting up a simple message broker with a basic rails applica
 This application utilizes the bunny gem and will require the user to run run a bundle install or update after pulling the repo. 
 
 To interact with this application:
+- clone this repo and cd into appForm
 - Run rails s in the terminal 
 - Navigate to http://localhost:3000/submissions
 
