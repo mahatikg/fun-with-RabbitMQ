@@ -29,18 +29,16 @@ class SubmissionsController < ApplicationController
   # POST /submissions.json
   def create
     @submission = Submission.new(submission_params)
-    # binding.pry
-
     respond_to do |format|
       if @submission.save
-        # binding.pry
-        publish(@submission)
-        format.html { redirect_to @submission, notice: 'Submission was successfully created.' }
-        format.json { render :show, status: :created, location: @submission }
-        start_receiver_connection
+          publish(@submission)
+          #calls the publish method which is insie the publisher.rb (a module to send the data to the queue)
+          format.html { redirect_to @submission, notice: 'Submission was successfully created.' }
+          format.json { render :show, status: :created, location: @submission }
+          start_receiver_connection
       else
-        format.html { render :new }
-        format.json { render json: @submission.errors, status: :unprocessable_entity }
+          format.html { render :new }
+          format.json { render json: @submission.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -70,13 +68,12 @@ class SubmissionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
     def set_submission
       @submission = Submission.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def submission_params
-      params.require(:submission).permit(:name, :email, :pwd, :phone)
+      params.require(:submission).permit(:name, :email,  :phone)
     end
 end
