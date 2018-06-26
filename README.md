@@ -4,11 +4,6 @@
 A first attempt at setting up a simple message broker with a basic rails application. 
 This application utilizes the bunny gem and will require the user to run run a bundle install or update after pulling the repo. 
 
-To interact with this application:
-- clone this repo and cd into appForm
-- Run rails s in the terminal 
-- Navigate to http://localhost:3000/submissions
-
 
 # Next Steps
 At present this code currently is only functional from the front end. While the data is being sent to and retrieved from a cloudAMQP queue, the email element of this application is not working as expected. Therefore, below is an outline of the next few steps in the development cycle 
