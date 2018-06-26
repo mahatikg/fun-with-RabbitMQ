@@ -5,37 +5,33 @@ class SubmissionsController < ApplicationController
   require 'pry'
   before_action :set_submission, only: [:show, :edit, :update, :destroy]
 
-  # GET /submissions
-  # GET /submissions.json
   def index
     @submissions = Submission.all
   end
 
-  # GET /submissions/1
-  # GET /submissions/1.json
   def show
   end
 
-  # GET /submissions/new
   def new
     @submission = Submission.new
   end
 
-  # GET /submissions/1/edit
   def edit
   end
 
   # POST /submissions
-  # POST /submissions.json
   def create
+    #create new submission 
     @submission = Submission.new(submission_params)
     respond_to do |format|
-      if @submission.save
+      if @submission.save 
           publish(@submission)
-          #calls the publish method which is insie the publisher.rb (a module to send the data to the queue)
+          #calls the publish method which is inside the publisher.rb (a module to send the data to the queue)
           format.html { redirect_to @submission, notice: 'Submission was successfully created.' }
+          #so user knows submission was made (also for mild debugging)
           format.json { render :show, status: :created, location: @submission }
           start_receiver_connection
+        #calls method in the publisher.rb 
       else
           format.html { render :new }
           format.json { render json: @submission.errors, status: :unprocessable_entity }
@@ -43,8 +39,7 @@ class SubmissionsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /submissions/1
-  # PATCH/PUT /submissions/1.json
+
   def update
     respond_to do |format|
       if @submission.update(submission_params)
@@ -57,8 +52,7 @@ class SubmissionsController < ApplicationController
     end
   end
 
-  # DELETE /submissions/1
-  # DELETE /submissions/1.json
+
   def destroy
     @submission.destroy
     respond_to do |format|
@@ -68,12 +62,12 @@ class SubmissionsController < ApplicationController
   end
 
   private
-
     def set_submission
       @submission = Submission.find(params[:id])
     end
 
     def submission_params
+      #the pieces of the submission object we want to capture and pass along! 
       params.require(:submission).permit(:name, :email,  :phone)
     end
 end
