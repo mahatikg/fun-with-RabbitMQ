@@ -31,7 +31,7 @@ class SubmissionsController < ApplicationController
           #so user knows submission was made (also for mild debugging)
           format.json { render :show, status: :created, location: @submission }
           start_receiver_connection
-        #calls method in the publisher.rb 
+        #bunny gem method
       else
           format.html { render :new }
           format.json { render json: @submission.errors, status: :unprocessable_entity }
